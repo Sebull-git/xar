@@ -1,5 +1,5 @@
 #!/usr/bin/env polaris
-usage: "xar [options] <file>"
+usage: "xar [options] <directory>"
 
 options {
     "-v" "--verbose" as verbose
@@ -21,15 +21,13 @@ if output == null then
 else {}
 
 
-let files = match getArgv() {
-    # Working around a bug with getArgv().
-    # Ideally, arguments should be treated like options anyway
-    (_ : _ : file : files) -> [file] ~ files
-    _ -> fail("Missing file arguments. Use xar --help for more information")
+let dir = match getArgv() {
+    [_, dir] -> dir
+    _ -> fail("Missing directory arguments. Use xar --help for more information")
 }
 
 if verbose then {
-    print("Creating archive from files: " ~ toString(files))
+    print("Creating archive from directory: " ~ toString(dir))
 }else {
 
 }
@@ -45,7 +43,11 @@ export XAR_ROOT=/tmp/xar/$id
 exec rm -r /tmp/xar/$id
 "
 
-!zip "-r" "xar_temp.zip" files
+let currentDir = !pwd
+
+chdir(dir)
+!zip "-r" (currentDir ~ "/xar_temp.zip") "."
+chdir(currentDir)
 
 # TODO: Doing this in bash right now, since polaris does not have file redirects yet 
 # and we should avoid loading the entire zip file into memory.
