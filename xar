@@ -3,7 +3,6 @@ usage: "xar [options] <directory>"
 
 options {
     "-v" "--verbose" as verbose
-    # Named arguments are still a bit broken with defaults
     "-m" "--main" (main = "main") : "Set the entrypoint to be run when executing the archive"
     "-z" "--zip-option" (*) as zipOptions : "Options to pass to 'zip'"
     "-o" "--output" (output = "a.out")
