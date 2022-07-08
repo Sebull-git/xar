@@ -4,21 +4,12 @@ usage: "xar [options] <directory>"
 options {
     "-v" "--verbose" as verbose
     # Named arguments are still a bit broken with defaults
-    "-m" "--main" (main) as mainDefault = "main" : "Set the entrypoint to be run when executing the archive"
+    "-m" "--main" (main = "main") : "Set the entrypoint to be run when executing the archive"
     "-z" "--zip-option" (*) as zipOptions : "Options to pass to 'zip'"
-    "-o" "--output" (output) as outputDefault = "a.out"
+    "-o" "--output" (output = "a.out")
 }
 ensure("zip")
 ensure("unzip")
-
-# Ugghhh
-if main == null then
-    main := mainDefault
-else {}
-
-if output == null then
-    output := outputDefault
-else {}
 
 
 let dir = match getArgv() {
@@ -54,4 +45,4 @@ chdir(currentDir)
 !bash "-c" ("echo '" ~ header ~ "' | cat - xar_temp.zip > " ~ output)
 !rm "xar_temp.zip"
 
-!chmod "+x" "a.out"
+!chmod "+x" output
