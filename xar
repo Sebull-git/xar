@@ -7,9 +7,6 @@ options {
     "-z" "--zip-option" (*) as zipOptions : "Options to pass to 'zip'"
     "-o" "--output" (output = "a.out")
 }
-ensure("zip")
-ensure("unzip")
-
 
 let dir = match getArgv() {
     [_, dir] -> dir
